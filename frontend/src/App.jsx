@@ -61,9 +61,9 @@ export default function App() {
       <footer className="mt-auto border-t border-slate-200/80 bg-white py-5 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-800">🛡️ AegisMed</span>
+            <span className="font-bold text-[#0D4F5C]">AegisMed</span>
             <span className="hidden sm:inline-block text-slate-300">·</span>
-            <span className="text-slate-500">Autonomous Clinical Operations</span>
+            <span className="text-slate-500">Medical Center & Clinical Intelligence</span>
           </div>
           <div className="flex items-center gap-3 text-slate-400 font-medium">
             <span>FastAPI Operational</span>

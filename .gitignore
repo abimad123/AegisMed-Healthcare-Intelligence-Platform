@@ -42,6 +42,14 @@ Library/
 *.swp
 *~
 
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Database / uploads / cache
 data/chroma_db/
 data/uploads/
