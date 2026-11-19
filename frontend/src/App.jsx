@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
+import Breadcrumb from './components/Breadcrumb';
 import HomeView from './pages/HomeView';
 import DashboardView from './pages/DashboardView';
 import DocumentIntelligenceView from './pages/DocumentIntelligenceView';
 import PolicyRAGView from './pages/PolicyRAGView';
 import AppointmentsView from './pages/AppointmentsView';
 import EvaluationView from './pages/EvaluationView';
-import { api } from './api';
+import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function App() {
   // "home" is strictly the default view
-  const [activeTab, setActiveTab] = useState('home');
+  // Routing handled by react-router-dom; state for active tab removed
   const [systemStatus, setSystemStatus] = useState({
     online: true,
     mongodb: { connected: true },
@@ -34,46 +37,63 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F8FF]">
-      {/* 
-        Single Unified Header Bar:
-        - LEFT: "🛡️ AegisMed ENTERPRISE" + tagline
-        - CENTER: Integrated Navigation Tabs
-        - RIGHT: Live Operational Badges
-      */}
-      <Header 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
-        status={systemStatus} 
-      />
-
-      {/* Main Dynamic View Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTab === 'home' && <HomeView onNavigate={setActiveTab} />}
-        {activeTab === 'dashboard' && <DashboardView status={systemStatus} onNavigate={setActiveTab} />}
-        {activeTab === 'doc_intel' && <DocumentIntelligenceView />}
-        {activeTab === 'rag_search' && <PolicyRAGView />}
-        {activeTab === 'appointments' && <AppointmentsView />}
-        {activeTab === 'evaluation' && <EvaluationView />}
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-auto border-t border-slate-200/80 bg-white py-5 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-[#0D4F5C]">AegisMed</span>
-            <span className="hidden sm:inline-block text-slate-300">·</span>
-            <span className="text-slate-500">Medical Center & Clinical Intelligence</span>
+    <BrowserRouter>
+      <Header status={systemStatus} />
+      <Breadcrumb status={systemStatus} />
+      <Routes>
+        <Route path="/" element={<HomeView />} />
+        <Route path="/dashboard" element={<DashboardView status={systemStatus} />} />
+        <Route path="/documents" element={<DocumentIntelligenceView />} />
+        <Route path="/policy-rag" element={<PolicyRAGView />} />
+        <Route path="/appointments" element={<AppointmentsView />} />
+        <Route path="/ai-evaluation" element={<EvaluationView />} />
+      </Routes>
+      {/* Footer Contact Section */}
+      <footer className="mt-auto bg-[#0D4F5C] text-white py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Contact Info */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Immediate Medical Assistance</h3>
+            <p className="text-sm">We’re here 24/7 for urgent health needs.</p>
+            <div className="flex items-center space-x-2 text-sm">
+              <Phone className="w-4 h-4" />
+              <span>+1 (800) 555‑0199</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm">
+              <Mail className="w-4 h-4" />
+              <span>support@aegismed.com</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm">
+              <MapPin className="w-4 h-4" />
+              <span>123 Health Ave, MedCity, TX 77001</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm">
+              <Clock className="w-4 h-4" />
+              <span>24/7 Emergency &amp; Trauma</span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-slate-400 font-medium">
-            <span>FastAPI Operational</span>
-            <span>•</span>
-            <span>ChromaDB Vector Store</span>
-            <span>•</span>
-            <span>MongoDB Synced</span>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Quick Links</h3>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/" className="hover:underline">Home</Link></li>
+              <li><Link to="/dashboard" className="hover:underline">Dashboard</Link></li>
+              <li><Link to="/appointments" className="hover:underline">Book Appointment</Link></li>
+              <li><Link to="/policy-rag" className="hover:underline">Policy RAG Search</Link></li>
+            </ul>
+          </div>
+
+          {/* Disclaimer */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Disclaimer</h3>
+            <p className="text-xs">AegisMed is a clinical decision support tool and does not replace professional medical advice. In emergencies, call your local emergency services.</p>
           </div>
         </div>
+        <div className="mt-8 text-center text-xs text-white/70">
+          © {new Date().getFullYear()} AegisMed • All rights reserved.
+        </div>
       </footer>
-    </div>
+    </BrowserRouter>
   );
 }

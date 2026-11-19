@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import {
   Phone,
   Clock,
@@ -28,7 +29,11 @@ import {
   Shield
 } from 'lucide-react';
 
-export default function Header({ activeTab, onTabChange, status }) {
+export default function Header({ status }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPath = location.pathname;
+
   // Navigation & interaction states
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -108,39 +113,39 @@ export default function Header({ activeTab, onTabChange, status }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Helper to change tab and close dropdowns/drawer
-  const handleNavClick = (tabId) => {
-    onTabChange(tabId);
+  // Helper to change route and close dropdowns/drawer
+  const handleNavClick = (path) => {
+    navigate(path);
     setOpenDropdown(null);
     setMobileMenuOpen(false);
     setSearchModalOpen(false);
   };
 
-  // Clinical AI Suite Items
+  // Clinical AI Suite Items with real URL routes
   const aiSuiteItems = [
     {
-      id: 'dashboard',
+      path: '/dashboard',
       title: 'Clinical Operations Dashboard',
       description: 'Real-time ward telemetry, bed census & OPD flow metrics',
       icon: Activity,
       badge: 'Live Telemetry'
     },
     {
-      id: 'doc_intel',
+      path: '/documents',
       title: 'Document Intelligence',
       description: 'Automated clinical extraction for lab PDFs & discharge notes',
       icon: FileText,
       badge: 'PyMuPDF'
     },
     {
-      id: 'rag_search',
-      title: 'Policy & Protocol RAG',
+      path: '/policy-rag',
+      title: 'Policy RAG Search',
       description: 'Clinical compliance, HIPAA, ICU policies with source citations',
       icon: ShieldCheck,
       badge: 'ChromaDB'
     },
     {
-      id: 'evaluation',
+      path: '/ai-evaluation',
       title: 'AI Model Safety & Evaluation',
       description: 'Faithfulness, relevancy scoring & hallucination audit logs',
       icon: CheckCircle2,
@@ -162,29 +167,29 @@ export default function Header({ activeTab, onTabChange, status }) {
 
   // Command search items database
   const searchResults = [
-    { title: 'Book Doctor Appointment', category: 'Patient Care', tabId: 'appointments', icon: Calendar },
-    { title: 'Clinical Operations Dashboard', category: 'AI Suite', tabId: 'dashboard', icon: Activity },
-    { title: 'Upload & Parse Lab Report (PDF)', category: 'AI Suite', tabId: 'doc_intel', icon: FileText },
-    { title: 'HIPAA & Hospital Policies Search', category: 'AI Suite', tabId: 'rag_search', icon: ShieldCheck },
-    { title: 'Diagnostic AI Evaluation Logs', category: 'AI Suite', tabId: 'evaluation', icon: CheckCircle2 },
-    { title: 'Cardiology & Vascular Institute', category: 'Specialty', tabId: 'appointments', icon: HeartPulse },
-    { title: 'Neurology & Brain Care Center', category: 'Specialty', tabId: 'appointments', icon: Brain },
-    { title: 'Orthopedics & Sports Medicine', category: 'Specialty', tabId: 'appointments', icon: Bone },
-    { title: 'ICU Visiting Hours & Policy Guide', category: 'Policy', tabId: 'rag_search', icon: ShieldCheck },
+    { title: 'Book Doctor Appointment', category: 'Patient Care', path: '/appointments', icon: Calendar },
+    { title: 'Clinical Operations Dashboard', category: 'AI Suite', path: '/dashboard', icon: Activity },
+    { title: 'Upload & Parse Lab Report (PDF)', category: 'AI Suite', path: '/documents', icon: FileText },
+    { title: 'Policy RAG Search (HIPAA & SOPs)', category: 'AI Suite', path: '/policy-rag', icon: ShieldCheck },
+    { title: 'Diagnostic AI Evaluation Logs', category: 'AI Suite', path: '/ai-evaluation', icon: CheckCircle2 },
+    { title: 'Cardiology & Vascular Institute', category: 'Specialty', path: '/appointments', icon: HeartPulse },
+    { title: 'Neurology & Brain Care Center', category: 'Specialty', path: '/appointments', icon: Brain },
+    { title: 'Orthopedics & Sports Medicine', category: 'Specialty', path: '/appointments', icon: Bone },
+    { title: 'ICU Visiting Hours & Policy Guide', category: 'Policy', path: '/policy-rag', icon: ShieldCheck },
     { title: 'Emergency Code Blue Protocols', category: 'Emergency', modal: 'emergency', icon: AlertTriangle }
   ].filter(item =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const isAISuiteActive = ['dashboard', 'doc_intel', 'rag_search', 'evaluation'].includes(activeTab);
+  const isAISuiteActive = ['/dashboard', '/documents', '/policy-rag', '/ai-evaluation'].includes(currentPath);
 
   return (
     <>
       {/* ─── 1. TOP HOSPITAL UTILITY BAR ────────────────────────────────────── */}
       <div className="w-full bg-[#0D4F5C] text-white text-xs py-2 select-none border-b border-teal-800/40">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-10 flex items-center justify-between gap-4">
-
+          
           {/* Left: Emergency Status & OPD Timings */}
           <div className="flex items-center gap-3 sm:gap-4 overflow-hidden text-slate-100">
             <div className="flex items-center gap-2">
@@ -213,7 +218,7 @@ export default function Header({ activeTab, onTabChange, status }) {
           {/* Right: Quick Utility Links */}
           <div className="flex items-center gap-3 sm:gap-5 text-teal-100/90 shrink-0">
             <button
-              onClick={() => handleNavClick('appointments')}
+              onClick={() => handleNavClick('/appointments')}
               className="hidden sm:inline-flex items-center gap-1 text-xs hover:text-white transition-colors cursor-pointer"
             >
               <Stethoscope className="w-3.5 h-3.5 text-teal-300" />
@@ -221,7 +226,7 @@ export default function Header({ activeTab, onTabChange, status }) {
             </button>
 
             <button
-              onClick={() => handleNavClick('doc_intel')}
+              onClick={() => handleNavClick('/documents')}
               className="hidden sm:inline-flex items-center gap-1 text-xs hover:text-white transition-colors cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5 text-teal-300" />
@@ -242,17 +247,28 @@ export default function Header({ activeTab, onTabChange, status }) {
 
       {/* ─── 2. MAIN STICKY CLINICAL HEADER ───────────────────────────────── */}
       <header
-        className={`sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all duration-300 ${isScrolled ? 'h-16 shadow-md' : 'h-20 shadow-xs'
-          }`}
+        className={`sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 transition-all duration-300 ${
+          isScrolled ? 'h-16 shadow-md' : 'h-20 shadow-xs'
+        }`}
       >
         <div className="w-full h-full px-4 sm:px-6 lg:px-8 xl:px-10 flex items-center justify-between gap-4">
-
+          
           {/* Brand Lockup: Clean Clinical Mark + AegisMed Wordmark */}
-          <div
-            onClick={() => handleNavClick('home')}
+          <Link
+            to="/"
+            onClick={() => {
+              setOpenDropdown(null);
+              setMobileMenuOpen(false);
+            }}
             className="flex items-center gap-3 cursor-pointer select-none group shrink-0"
           >
-
+            <div className="w-10 h-10 rounded-xl bg-[#0D4F5C] flex items-center justify-center text-white shadow-md shadow-teal-900/15 group-hover:bg-[#093B45] group-hover:scale-105 transition-all">
+              {/* Clinical Shield with Cross icon */}
+              <div className="relative flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white/90" />
+                <span className="absolute text-teal-200 font-black text-xs leading-none">+</span>
+              </div>
+            </div>
 
             <div>
               <div className="flex items-center gap-2">
@@ -267,7 +283,7 @@ export default function Header({ activeTab, onTabChange, status }) {
                 Medical Center & Clinical Intelligence
               </p>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation Links & Mega Dropdowns */}
           <nav
@@ -275,15 +291,16 @@ export default function Header({ activeTab, onTabChange, status }) {
             className="hidden lg:flex items-center gap-7 h-full text-sm font-medium text-slate-700"
           >
             {/* 1. Home Link */}
-            <button
-              onClick={() => handleNavClick('home')}
-              className={`h-full flex items-center border-b-2 font-medium transition-all ${activeTab === 'home'
+            <Link
+              to="/"
+              className={`h-full flex items-center border-b-2 font-medium transition-all ${
+                currentPath === '/'
                   ? 'border-[#0D4F5C] text-[#0D4F5C] font-semibold'
                   : 'border-transparent text-slate-600 hover:text-[#0D4F5C]'
-                }`}
+              }`}
             >
               Home
-            </button>
+            </Link>
 
             {/* 2. Clinical Services Mega-Menu Dropdown */}
             <div
@@ -296,15 +313,17 @@ export default function Header({ activeTab, onTabChange, status }) {
                 onClick={() => setOpenDropdown(openDropdown === 'services' ? null : 'services')}
                 aria-expanded={openDropdown === 'services'}
                 aria-haspopup="true"
-                className={`h-full flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${openDropdown === 'services'
+                className={`h-full flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+                  openDropdown === 'services'
                     ? 'border-[#0D4F5C] text-[#0D4F5C] font-semibold'
                     : 'border-transparent text-slate-600 hover:text-[#0D4F5C]'
-                  }`}
+                }`}
               >
                 <span>Clinical Services</span>
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${openDropdown === 'services' ? 'rotate-180 text-[#0D4F5C]' : 'text-slate-400'
-                    }`}
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    openDropdown === 'services' ? 'rotate-180 text-[#0D4F5C]' : 'text-slate-400'
+                  }`}
                 />
               </button>
 
@@ -330,7 +349,7 @@ export default function Header({ activeTab, onTabChange, status }) {
                       return (
                         <div
                           key={i}
-                          onClick={() => handleNavClick('appointments')}
+                          onClick={() => handleNavClick('/appointments')}
                           className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-all cursor-pointer group"
                         >
                           <div className="w-8 h-8 rounded-lg bg-teal-50 text-[#0D4F5C] flex items-center justify-center shrink-0 group-hover:bg-[#0D4F5C] group-hover:text-white transition-colors">
@@ -353,7 +372,7 @@ export default function Header({ activeTab, onTabChange, status }) {
                   <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs bg-slate-50/70 -mx-5 -mb-5 px-5 py-3 rounded-b-2xl">
                     <span className="text-slate-600">Need immediate assistance with department selection?</span>
                     <button
-                      onClick={() => handleNavClick('appointments')}
+                      onClick={() => handleNavClick('/appointments')}
                       className="font-semibold text-[#0D4F5C] hover:text-[#093B45] flex items-center gap-1 transition-colors cursor-pointer"
                     >
                       <span>View All Specialties & Doctors</span>
@@ -375,16 +394,18 @@ export default function Header({ activeTab, onTabChange, status }) {
                 onClick={() => setOpenDropdown(openDropdown === 'ai_suite' ? null : 'ai_suite')}
                 aria-expanded={openDropdown === 'ai_suite'}
                 aria-haspopup="true"
-                className={`h-full flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${isAISuiteActive || openDropdown === 'ai_suite'
+                className={`h-full flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+                  isAISuiteActive || openDropdown === 'ai_suite'
                     ? 'border-[#0D4F5C] text-[#0D4F5C] font-semibold'
                     : 'border-transparent text-slate-600 hover:text-[#0D4F5C]'
-                  }`}
+                }`}
               >
                 <Sparkles className="w-4 h-4 text-teal-600" />
                 <span>Clinical AI Suite</span>
                 <ChevronDown
-                  className={`w-4 h-4 transition-transform duration-200 ${openDropdown === 'ai_suite' ? 'rotate-180 text-[#0D4F5C]' : 'text-slate-400'
-                    }`}
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    openDropdown === 'ai_suite' ? 'rotate-180 text-[#0D4F5C]' : 'text-slate-400'
+                  }`}
                 />
               </button>
 
@@ -406,21 +427,23 @@ export default function Header({ activeTab, onTabChange, status }) {
                   <div className="space-y-1">
                     {aiSuiteItems.map((item) => {
                       const Icon = item.icon;
-                      const isItemActive = activeTab === item.id;
+                      const isItemActive = currentPath === item.path;
                       return (
                         <div
-                          key={item.id}
-                          onClick={() => handleNavClick(item.id)}
-                          className={`flex items-start gap-3.5 p-3 rounded-xl transition-all cursor-pointer ${isItemActive
+                          key={item.path}
+                          onClick={() => handleNavClick(item.path)}
+                          className={`flex items-start gap-3.5 p-3 rounded-xl transition-all cursor-pointer ${
+                            isItemActive
                               ? 'bg-teal-50/80 border border-teal-200/80 text-[#0D4F5C]'
                               : 'hover:bg-slate-50 text-slate-700'
-                            }`}
+                          }`}
                         >
                           <div
-                            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${isItemActive
+                            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                              isItemActive
                                 ? 'bg-[#0D4F5C] text-white shadow-xs'
                                 : 'bg-slate-100 text-[#0D4F5C] group-hover:bg-[#0D4F5C] group-hover:text-white'
-                              }`}
+                            }`}
                           >
                             <Icon className="w-4 h-4" />
                           </div>
@@ -428,8 +451,9 @@ export default function Header({ activeTab, onTabChange, status }) {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between">
                               <span
-                                className={`text-xs font-bold ${isItemActive ? 'text-[#0D4F5C]' : 'text-slate-900'
-                                  }`}
+                                className={`text-xs font-bold ${
+                                  isItemActive ? 'text-[#0D4F5C]' : 'text-slate-900'
+                                }`}
                               >
                                 {item.title}
                               </span>
@@ -450,18 +474,19 @@ export default function Header({ activeTab, onTabChange, status }) {
             </div>
 
             {/* 4. Appointments Link */}
-            <button
-              onClick={() => handleNavClick('appointments')}
-              className={`h-full flex items-center gap-1.5 border-b-2 font-medium transition-all ${activeTab === 'appointments'
+            <Link
+              to="/appointments"
+              className={`h-full flex items-center gap-1.5 border-b-2 font-medium transition-all ${
+                currentPath === '/appointments'
                   ? 'border-[#0D4F5C] text-[#0D4F5C] font-semibold'
                   : 'border-transparent text-slate-600 hover:text-[#0D4F5C]'
-                }`}
+              }`}
             >
               <span>Appointments</span>
               <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-teal-50 text-[#0D4F5C] border border-teal-200">
                 Online
               </span>
-            </button>
+            </Link>
           </nav>
 
           {/* Right Action Cluster */}
@@ -482,7 +507,7 @@ export default function Header({ activeTab, onTabChange, status }) {
 
             {/* Primary CTA Button: Book Appointment */}
             <button
-              onClick={() => handleNavClick('appointments')}
+              onClick={() => handleNavClick('/appointments')}
               type="button"
               className="bg-[#0D4F5C] hover:bg-[#093B45] text-white px-4 py-2.5 rounded-lg text-xs sm:text-sm font-semibold shadow-xs hover:shadow-md transition-all active:scale-[0.98] flex items-center gap-2 cursor-pointer"
             >
@@ -565,14 +590,15 @@ export default function Header({ activeTab, onTabChange, status }) {
 
             {/* Scrollable Accordion Navigation List */}
             <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
-
+              
               {/* Home */}
               <button
-                onClick={() => handleNavClick('home')}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === 'home'
+                onClick={() => handleNavClick('/')}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  currentPath === '/'
                     ? 'bg-teal-50 text-[#0D4F5C] font-bold border border-teal-200'
                     : 'text-slate-700 hover:bg-slate-100'
-                  }`}
+                }`}
               >
                 <span>Home Portal</span>
                 <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -591,8 +617,9 @@ export default function Header({ activeTab, onTabChange, status }) {
                     Clinical AI Suite
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform ${mobileAccordion === 'ai_suite' ? 'rotate-180' : ''
-                      }`}
+                    className={`w-4 h-4 text-slate-400 transition-transform ${
+                      mobileAccordion === 'ai_suite' ? 'rotate-180' : ''
+                    }`}
                   />
                 </button>
 
@@ -600,15 +627,16 @@ export default function Header({ activeTab, onTabChange, status }) {
                   <div className="p-2 space-y-1 bg-white border-t border-slate-100">
                     {aiSuiteItems.map((item) => {
                       const Icon = item.icon;
-                      const isItemActive = activeTab === item.id;
+                      const isItemActive = currentPath === item.path;
                       return (
                         <button
-                          key={item.id}
-                          onClick={() => handleNavClick(item.id)}
-                          className={`w-full flex items-center gap-2.5 p-2 rounded-lg text-left text-xs font-medium transition-colors ${isItemActive
+                          key={item.path}
+                          onClick={() => handleNavClick(item.path)}
+                          className={`w-full flex items-center gap-2.5 p-2 rounded-lg text-left text-xs font-medium transition-colors ${
+                            isItemActive
                               ? 'bg-teal-50 text-[#0D4F5C] font-bold'
                               : 'text-slate-600 hover:bg-slate-50'
-                            }`}
+                          }`}
                         >
                           <Icon className="w-4 h-4 text-teal-700 shrink-0" />
                           <span className="flex-1 truncate">{item.title}</span>
@@ -632,8 +660,9 @@ export default function Header({ activeTab, onTabChange, status }) {
                     Clinical Services
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform ${mobileAccordion === 'services' ? 'rotate-180' : ''
-                      }`}
+                    className={`w-4 h-4 text-slate-400 transition-transform ${
+                      mobileAccordion === 'services' ? 'rotate-180' : ''
+                    }`}
                   />
                 </button>
 
@@ -642,7 +671,7 @@ export default function Header({ activeTab, onTabChange, status }) {
                     {clinicalSpecialties.map((dept, i) => (
                       <button
                         key={i}
-                        onClick={() => handleNavClick('appointments')}
+                        onClick={() => handleNavClick('/appointments')}
                         className="w-full flex items-center gap-2 p-2 rounded-lg text-left text-xs text-slate-600 hover:bg-slate-50 hover:text-[#0D4F5C]"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0" />
@@ -655,11 +684,12 @@ export default function Header({ activeTab, onTabChange, status }) {
 
               {/* Appointments */}
               <button
-                onClick={() => handleNavClick('appointments')}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === 'appointments'
+                onClick={() => handleNavClick('/appointments')}
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  currentPath === '/appointments'
                     ? 'bg-teal-50 text-[#0D4F5C] font-bold border border-teal-200'
                     : 'text-slate-700 hover:bg-slate-100'
-                  }`}
+                }`}
               >
                 <span className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-[#0D4F5C]" />
@@ -675,7 +705,7 @@ export default function Header({ activeTab, onTabChange, status }) {
             {/* Drawer Sticky Footer with Emergency Button & Booking CTA */}
             <div className="p-4 border-t border-slate-200 bg-slate-50 space-y-2.5">
               <button
-                onClick={() => handleNavClick('appointments')}
+                onClick={() => handleNavClick('/appointments')}
                 className="w-full bg-[#0D4F5C] hover:bg-[#093B45] text-white py-2.5 rounded-lg text-xs font-bold shadow-sm flex items-center justify-center gap-2"
               >
                 <Calendar className="w-4 h-4 text-teal-200" />
@@ -731,8 +761,8 @@ export default function Header({ activeTab, onTabChange, status }) {
                         if (item.modal === 'emergency') {
                           setSearchModalOpen(false);
                           setEmergencyModalOpen(true);
-                        } else if (item.tabId) {
-                          handleNavClick(item.tabId);
+                        } else if (item.path) {
+                          handleNavClick(item.path);
                         }
                       }}
                       className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-colors text-left group cursor-pointer"
@@ -843,15 +873,15 @@ export default function Header({ activeTab, onTabChange, status }) {
               <button
                 onClick={() => {
                   setEmergencyModalOpen(false);
-                  handleNavClick('rag_search');
+                  handleNavClick('/policy-rag');
                 }}
-                className="text-xs font-semibold text-[#0D4F5C] hover:underline"
+                className="text-xs font-semibold text-[#0D4F5C] hover:underline cursor-pointer"
               >
                 Search Full Policy Documents in RAG →
               </button>
               <button
                 onClick={() => setEmergencyModalOpen(false)}
-                className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-1.5 rounded-lg text-xs font-semibold"
+                className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer"
               >
                 Dismiss
               </button>

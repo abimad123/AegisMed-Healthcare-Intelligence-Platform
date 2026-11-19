@@ -55,30 +55,53 @@ export default function EvaluationView() {
   };
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#0B1340] via-[#12236E] to-[#1E2FE0] text-white p-8 shadow-md">
-        <div className="text-xs font-bold uppercase tracking-wider text-blue-200">Ragas Evaluation Engine</div>
-        <h1 className="text-3xl font-extrabold tracking-tight mt-1 text-white">AI Evaluation Pipeline</h1>
-        <p className="text-sm text-slate-200 mt-1 max-w-2xl">
-          Zero-hallucination benchmark testing across clinical answers evaluating Faithfulness, Answer Relevancy, and Context Relevancy.
-        </p>
+    <div className="space-y-8 pb-16">
+      {/* ── 1. DEEP CLINICAL TEAL BANNER ──────────────────────────────────────── */}
+      <div className="relative rounded-2xl bg-gradient-to-r from-[#0D4F5C] via-[#115E6E] to-[#0B424D] border border-[#093B45] text-white p-7 sm:p-8 shadow-md overflow-hidden">
+        <div 
+          className="absolute inset-0 opacity-10 pointer-events-none" 
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '24px 24px'
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-teal-900/60 text-teal-200 border border-teal-500/30">
+              <CheckCircle className="w-3.5 h-3.5 text-teal-300" />
+              <span>RAGAS EVALUATION ENGINE</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white">
+              AI Evaluation Pipeline
+            </h1>
+            <p className="text-xs sm:text-sm text-teal-100/90 mt-1.5 max-w-2xl font-normal leading-relaxed">
+              Zero-hallucination benchmark testing across clinical answers evaluating Faithfulness, Answer Relevancy, and Context Relevancy.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <span className="px-3 py-1.5 rounded-full bg-teal-900/80 border border-teal-600/50 text-xs font-semibold text-teal-200 tracking-wide flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>Faithfulness & Audit Logs</span>
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => { setActiveSubTab('demo'); setError(null); }}
-          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
-            activeSubTab === 'demo' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            activeSubTab === 'demo' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           📊 Automated Benchmark Demo
         </button>
         <button
           onClick={() => { setActiveSubTab('single'); setError(null); }}
-          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
-            activeSubTab === 'single' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            activeSubTab === 'single' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           🧪 Custom Triplet Evaluation
@@ -105,9 +128,9 @@ export default function EvaluationView() {
             <button
               onClick={runBenchmark}
               disabled={loading}
-              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-50 shrink-0"
+              className="px-6 py-3 rounded-xl bg-[#0D4F5C] hover:bg-[#093B45] text-white font-semibold text-xs sm:text-sm shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 shrink-0 transition-all"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              {loading ? <Loader2 className="w-4 h-4 animate-spin text-teal-200" /> : <Sparkles className="w-4 h-4 text-teal-200" />}
               <span>{loading ? 'Evaluating Samples...' : 'Run Benchmark Evaluation'}</span>
             </button>
           </div>
@@ -124,13 +147,13 @@ export default function EvaluationView() {
                 ].map((item, idx) => {
                   const pct = Math.round((item.score || 0) * 100);
                   return (
-                    <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center space-y-2">
+                    <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-2xs text-center space-y-2">
                       <div className="text-xs font-bold uppercase tracking-wider text-slate-400">{item.label}</div>
-                      <div className="text-4xl font-extrabold text-slate-900">{pct}%</div>
+                      <div className="text-4xl font-extrabold text-[#0D4F5C]">{pct}%</div>
                       <div className="text-xs text-slate-500 font-medium">{item.desc}</div>
                       <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mt-3">
                         <div 
-                          className="bg-blue-600 h-full rounded-full transition-all duration-700" 
+                          className="bg-[#0D4F5C] h-full rounded-full transition-all duration-700" 
                           style={{ width: `${pct}%` }} 
                         />
                       </div>
@@ -140,7 +163,7 @@ export default function EvaluationView() {
               </div>
 
               {/* Sample Results List */}
-              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-2xs space-y-4">
                 <div className="flex items-center justify-between text-xs text-slate-500 font-bold uppercase tracking-wider">
                   <span>Evaluated Test Samples ({report.total_samples || 0})</span>
                   <span>Execution: {(report.duration_seconds || 0).toFixed(2)}s</span>
@@ -148,10 +171,10 @@ export default function EvaluationView() {
 
                 <div className="space-y-4">
                   {(report.results || []).map((res, i) => (
-                    <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div key={i} className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200/80 space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="font-bold text-slate-900 text-sm">Q: {res.question}</div>
-                        <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-mono text-xs font-bold border border-blue-200">
+                        <span className="px-2 py-0.5 rounded-full bg-teal-50 text-[#0D4F5C] font-mono text-xs font-bold border border-teal-200">
                           Overall: {Math.round((res.overall_score || 0) * 100)}%
                         </span>
                       </div>
@@ -167,7 +190,7 @@ export default function EvaluationView() {
 
       {/* Single Triplet Tab */}
       {activeSubTab === 'single' && (
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-2xs space-y-6">
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Question</label>
@@ -175,7 +198,7 @@ export default function EvaluationView() {
                 type="text"
                 value={singleQ}
                 onChange={(e) => setSingleQ(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D4F5C]/15 focus:border-[#0D4F5C]"
               />
             </div>
 
@@ -185,7 +208,7 @@ export default function EvaluationView() {
                 rows={3}
                 value={singleA}
                 onChange={(e) => setSingleA(e.target.value)}
-                className="w-full p-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full p-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D4F5C]/15 focus:border-[#0D4F5C]"
               />
             </div>
 
@@ -195,16 +218,16 @@ export default function EvaluationView() {
                 rows={3}
                 value={singleCtx}
                 onChange={(e) => setSingleCtx(e.target.value)}
-                className="w-full p-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full p-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D4F5C]/15 focus:border-[#0D4F5C]"
               />
             </div>
 
             <button
               onClick={runSingleEvaluation}
               disabled={singleLoading}
-              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-6 py-3 rounded-xl bg-[#0D4F5C] hover:bg-[#093B45] text-white font-semibold text-xs sm:text-sm shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
             >
-              {singleLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+              {singleLoading ? <Loader2 className="w-4 h-4 animate-spin text-teal-200" /> : <CheckCircle className="w-4 h-4 text-teal-200" />}
               <span>{singleLoading ? 'Evaluating Triplet...' : 'Evaluate Clinical Triplet'}</span>
             </button>
           </div>

@@ -80,46 +80,69 @@ export default function AppointmentsView() {
   };
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#0B1340] via-[#12236E] to-[#1E2FE0] text-white p-8 shadow-md">
-        <div className="text-xs font-bold uppercase tracking-wider text-blue-200">Booking & Schedules</div>
-        <h1 className="text-3xl font-extrabold tracking-tight mt-1 text-white">Appointments Assistant</h1>
-        <p className="text-sm text-slate-200 mt-1 max-w-2xl">
-          Multi-turn conversational doctor scheduling assistant integrated with active MongoDB booking persistence.
-        </p>
+    <div className="space-y-8 pb-16">
+      {/* ── 1. DEEP CLINICAL TEAL BANNER ──────────────────────────────────────── */}
+      <div className="relative rounded-2xl bg-gradient-to-r from-[#0D4F5C] via-[#115E6E] to-[#0B424D] border border-[#093B45] text-white p-7 sm:p-8 shadow-md overflow-hidden">
+        <div 
+          className="absolute inset-0 opacity-10 pointer-events-none" 
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '24px 24px'
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-teal-900/60 text-teal-200 border border-teal-500/30">
+              <CalendarIcon className="w-3.5 h-3.5 text-teal-300" />
+              <span>BOOKING & SCHEDULES</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white">
+              Appointments Assistant
+            </h1>
+            <p className="text-xs sm:text-sm text-teal-100/90 mt-1.5 max-w-2xl font-normal leading-relaxed">
+              Multi-turn conversational doctor scheduling assistant integrated with active MongoDB booking persistence.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <span className="px-3 py-1.5 rounded-full bg-teal-900/80 border border-teal-600/50 text-xs font-semibold text-teal-200 tracking-wide flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>10 Clinical Specialties</span>
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-3 overflow-x-auto">
         <button
           onClick={() => setActiveSubTab('chat')}
-          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSubTab === 'chat' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'chat' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           💬 Conversational Booking
         </button>
         <button
           onClick={() => setActiveSubTab('doctors')}
-          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSubTab === 'doctors' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'doctors' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           👨‍⚕️ Doctors Roster ({doctors.length})
         </button>
         <button
           onClick={() => setActiveSubTab('slots')}
-          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSubTab === 'slots' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'slots' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           ⏰ Real-Time Slots
         </button>
         <button
           onClick={() => { setActiveSubTab('bookings'); fetchBookings(); }}
-          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
-            activeSubTab === 'bookings' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'bookings' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           📋 Active Bookings ({bookings.length})
@@ -134,13 +157,13 @@ export default function AppointmentsView() {
             {messages.map((m, idx) => (
               <div key={idx} className={`flex gap-3 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {m.role === 'bot' && (
-                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Bot className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-full bg-[#0D4F5C] text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Bot className="w-4 h-4 text-teal-200" />
                   </div>
                 )}
                 <div className={`p-4 rounded-2xl text-sm max-w-lg leading-relaxed shadow-xs ${
                   m.role === 'user'
-                    ? 'bg-blue-600 text-white rounded-br-none'
+                    ? 'bg-[#0D4F5C] text-white rounded-br-none'
                     : 'bg-white text-slate-800 border border-slate-200/90 rounded-bl-none'
                 }`}>
                   {m.text}
@@ -149,11 +172,11 @@ export default function AppointmentsView() {
             ))}
             {chatLoading && (
               <div className="flex gap-3 justify-start items-center">
-                <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0">
-                  <Bot className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-full bg-[#0D4F5C] text-white flex items-center justify-center shrink-0">
+                  <Bot className="w-4 h-4 text-teal-200" />
                 </div>
                 <div className="bg-white p-3 rounded-2xl border border-slate-200 text-xs text-slate-500 flex items-center gap-2">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0D4F5C]" />
                   <span>Checking doctor roster and slots...</span>
                 </div>
               </div>
@@ -167,14 +190,14 @@ export default function AppointmentsView() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="e.g. 'Book with Dr. Sarah Jenkins tomorrow afternoon at 2pm for Arjun Mehta'..."
-              className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0D4F5C]/15 focus:border-[#0D4F5C]"
             />
             <button
               type="submit"
               disabled={chatLoading || !input.trim()}
-              className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-5 py-3 rounded-xl bg-[#0D4F5C] hover:bg-[#093B45] text-white font-semibold text-sm shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
             >
-              <Send className="w-4 h-4" />
+              <Send className="w-4 h-4 text-teal-200" />
               <span>Send</span>
             </button>
           </form>

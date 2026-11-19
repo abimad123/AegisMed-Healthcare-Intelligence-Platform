@@ -92,30 +92,53 @@ Clinical Recommendations & Care Plan:
   };
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#0B1340] via-[#12236E] to-[#1E2FE0] text-white p-8 shadow-md">
-        <div className="text-xs font-bold uppercase tracking-wider text-blue-200">Clinical Extraction</div>
-        <h1 className="text-3xl font-extrabold tracking-tight mt-1 text-white">Document Intelligence</h1>
-        <p className="text-sm text-slate-200 mt-1 max-w-2xl">
-          Automated ingestion and extraction of structured patient records, vital indicators, diagnostic codes, and lab tests.
-        </p>
+    <div className="space-y-8 pb-16">
+      {/* ── 1. DEEP CLINICAL TEAL BANNER ──────────────────────────────────────── */}
+      <div className="relative rounded-2xl bg-gradient-to-r from-[#0D4F5C] via-[#115E6E] to-[#0B424D] border border-[#093B45] text-white p-7 sm:p-8 shadow-md overflow-hidden">
+        <div 
+          className="absolute inset-0 opacity-10 pointer-events-none" 
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+            backgroundSize: '24px 24px'
+          }}
+        />
+
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-extrabold tracking-wider uppercase bg-teal-900/60 text-teal-200 border border-teal-500/30">
+              <FileText className="w-3.5 h-3.5 text-teal-300" />
+              <span>CLINICAL EXTRACTION</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white">
+              Document Intelligence
+            </h1>
+            <p className="text-xs sm:text-sm text-teal-100/90 mt-1.5 max-w-2xl font-normal leading-relaxed">
+              Automated ingestion and extraction of structured patient records, vital indicators, diagnostic codes, and lab tests.
+            </p>
+          </div>
+          <div className="shrink-0">
+            <span className="px-3 py-1.5 rounded-full bg-teal-900/80 border border-teal-600/50 text-xs font-semibold text-teal-200 tracking-wide flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>PyMuPDF + Pydantic v2</span>
+            </span>
+          </div>
+        </div>
       </div>
 
       {/* Sub Tabs */}
       <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
         <button
           onClick={() => { setActiveSubTab('upload'); setError(null); }}
-          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
-            activeSubTab === 'upload' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            activeSubTab === 'upload' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           📄 Upload Clinical PDF
         </button>
         <button
           onClick={() => { setActiveSubTab('text'); setError(null); }}
-          className={`px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer ${
-            activeSubTab === 'text' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            activeSubTab === 'text' ? 'bg-[#0D4F5C] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
           ✍️ Paste Clinical Text
@@ -132,9 +155,9 @@ Clinical Recommendations & Care Plan:
 
       {/* Upload mode */}
       {activeSubTab === 'upload' && (
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-          <label className="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/50 hover:bg-blue-50/20 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-colors block text-center">
-            <UploadCloud className="w-12 h-12 text-blue-600 mb-3" />
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-2xs space-y-6">
+          <label className="border-2 border-dashed border-slate-300 hover:border-[#0D4F5C] bg-slate-50/50 hover:bg-teal-50/20 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer transition-colors block text-center">
+            <UploadCloud className="w-12 h-12 text-[#0D4F5C] mb-3" />
             <span className="text-sm font-bold text-slate-800">Drag and drop patient PDF or click to browse</span>
             <span className="text-xs text-slate-400 mt-1">Discharge Summaries, Lab Panels, Prescriptions (Max 25MB)</span>
             <input 
@@ -146,9 +169,9 @@ Clinical Recommendations & Care Plan:
           </label>
 
           {file && (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-blue-50/70 border border-blue-200/60">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-teal-50/70 border border-teal-200/60">
               <div className="flex items-center gap-3">
-                <FileText className="w-6 h-6 text-blue-600" />
+                <FileText className="w-6 h-6 text-[#0D4F5C]" />
                 <div>
                   <div className="text-sm font-bold text-slate-900">{file.name}</div>
                   <div className="text-xs text-slate-500">{(file.size / 1024).toFixed(1)} KB</div>
@@ -157,9 +180,9 @@ Clinical Recommendations & Care Plan:
               <button
                 onClick={processUpload}
                 disabled={loading}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-sm shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#0D4F5C] hover:bg-[#093B45] active:scale-[0.98] text-white font-semibold text-xs sm:text-sm shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
               >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                {loading ? <Loader2 className="w-4 h-4 animate-spin text-teal-200" /> : <CheckCircle2 className="w-4 h-4 text-teal-200" />}
                 <span>{loading ? 'Analyzing with PyMuPDF...' : 'Analyze Document'}</span>
               </button>
             </div>
@@ -169,7 +192,7 @@ Clinical Recommendations & Care Plan:
 
       {/* Text paste mode */}
       {activeSubTab === 'text' && (
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/90 shadow-2xs space-y-5">
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
               Unstructured Clinical Report
@@ -178,7 +201,7 @@ Clinical Recommendations & Care Plan:
               rows={10}
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
-              className="w-full p-4 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-slate-50/30"
+              className="w-full p-4 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#0D4F5C]/15 focus:border-[#0D4F5C] bg-slate-50/30"
               placeholder="Paste patient summary..."
             />
           </div>
@@ -186,9 +209,9 @@ Clinical Recommendations & Care Plan:
           <button
             onClick={processTextExtraction}
             disabled={loading}
-            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-sm shadow-md shadow-blue-500/20 flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            className="px-6 py-3 rounded-xl bg-[#0D4F5C] hover:bg-[#093B45] active:scale-[0.98] text-white font-semibold text-xs sm:text-sm shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
           >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+            {loading ? <Loader2 className="w-4 h-4 animate-spin text-teal-200" /> : <CheckCircle2 className="w-4 h-4 text-teal-200" />}
             <span>{loading ? 'Extracting Entities...' : 'Extract Clinical Data'}</span>
           </button>
         </div>
@@ -198,9 +221,9 @@ Clinical Recommendations & Care Plan:
       {extraction && (
         <div className="space-y-6 pt-4">
           {/* Header Card */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#0D4F5C] uppercase tracking-wider">
                 {extraction.document_type || 'Clinical Document'}
               </span>
               <h3 className="text-xl font-extrabold text-slate-900 mt-1">
